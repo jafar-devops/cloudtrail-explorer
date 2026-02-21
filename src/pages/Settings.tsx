@@ -19,10 +19,6 @@ const Settings = () => {
       toast({ title: "Error", description: "Please enter a backend API URL", variant: "destructive" });
       return;
     }
-    if (!settings.useMockData && !settings.bucketName) {
-      toast({ title: "Error", description: "Please enter a bucket name", variant: "destructive" });
-      return;
-    }
     setConnecting(true);
     try {
       const res = await connectToBucket(settings);
@@ -48,7 +44,7 @@ const Settings = () => {
             <Shield className="h-7 w-7 text-primary" />
           </div>
           <CardTitle className="text-2xl">CloudTrail Log Analyzer</CardTitle>
-          <CardDescription>Connect to your backend API to browse CloudTrail logs from S3</CardDescription>
+          <CardDescription>Connect to your backend API to browse CloudTrail logs from a local folder path</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between rounded-lg border p-4">
@@ -77,21 +73,12 @@ const Settings = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="bucket">S3 Bucket Name</Label>
-                <Input
-                  id="bucket"
-                  placeholder="my-cloudtrail-bucket"
-                  value={settings.bucketName}
-                  onChange={(e) => setSettings((s) => ({ ...s, bucketName: e.target.value }))}
-                />
-              </div>
             </>
           )}
 
           <Button onClick={handleConnect} className="w-full" size="lg" disabled={connecting}>
             {connecting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {connecting ? "Connecting…" : "Connect & Explore"}
+            {connecting ? "Connecting..." : "Connect & Explore"}
           </Button>
         </CardContent>
       </Card>

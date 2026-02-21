@@ -75,7 +75,7 @@ export function TopBar({ breadcrumb, totalCount, search, onSearchChange, view, o
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             className="h-9 w-56 pl-9 text-sm"
-            placeholder="Search events…"
+            placeholder="Search events..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
           />

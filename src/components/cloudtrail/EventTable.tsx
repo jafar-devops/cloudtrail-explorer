@@ -129,7 +129,7 @@ export function EventTable({ events, loading, page, pageSize, totalCount, onPage
       {/* Pagination */}
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">
-          Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, totalCount)} of {totalCount} events
+          Showing {(page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalCount)} of {totalCount} events
         </span>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>Previous</Button>

@@ -31,13 +31,24 @@ function TreeNode({ node, depth, path, onSelectDay, loadChildren }: TreeNodeProp
       onSelectDay(node.prefix, currentPath);
       return;
     }
+
     if (!loaded && !loading) {
       setLoading(true);
-      const res = await loadChildren(node.prefix);
-      setChildren(res);
-      setLoaded(true);
-      setLoading(false);
+      try {
+        const res = await loadChildren(node.prefix);
+        setChildren(res);
+        setLoaded(true);
+
+        // Treat leaf folders as a selectable day-like node for non-standard layouts.
+        if (res.length === 0) {
+          onSelectDay(node.prefix, currentPath);
+          return;
+        }
+      } finally {
+        setLoading(false);
+      }
     }
+
     setOpen((v) => !v);
   }, [isDay, loaded, loading, node.prefix, onSelectDay, currentPath, loadChildren]);
 
@@ -58,7 +69,7 @@ function TreeNode({ node, depth, path, onSelectDay, loadChildren }: TreeNodeProp
         )}
         <Icon className="h-4 w-4 shrink-0 text-primary" />
         <span className="truncate">{node.name}</span>
-        {loading && <span className="ml-auto text-xs text-muted-foreground">…</span>}
+        {loading && <span className="ml-auto text-xs text-muted-foreground">...</span>}
       </button>
       {open && children.map((child) => (
         <TreeNode key={child.prefix} node={child} depth={depth + 1} path={currentPath} onSelectDay={onSelectDay} loadChildren={loadChildren} />

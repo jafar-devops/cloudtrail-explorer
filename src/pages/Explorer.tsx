@@ -32,7 +32,13 @@ const Explorer = () => {
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(true);
 
   useEffect(() => {
-    loadFolders("/");
+    const bootstrap = async () => {
+      const rootFolders = await loadFolders("/");
+      if (rootFolders.length === 0) {
+        handleSelectDay("/", ["root"]);
+      }
+    };
+    void bootstrap();
   }, []);
 
   const loadFolders = async (prefix: string) => {
