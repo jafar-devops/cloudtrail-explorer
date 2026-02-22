@@ -10,6 +10,7 @@ import { Dashboard } from "@/components/cloudtrail/Dashboard";
 import { TopBar } from "@/components/cloudtrail/TopBar";
 import { toast } from "@/hooks/use-toast";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { logout } from "@/services/auth";
 
 const Explorer = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Explorer = () => {
   const [events, setEvents] = useState<CloudTrailEvent[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(50);
+  const [pageSize] = useState(25);
   const [loading, setLoading] = useState(false);
   const [selectedPrefix, setSelectedPrefix] = useState("");
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
@@ -28,6 +29,7 @@ const Explorer = () => {
   const [sortField, setSortField] = useState<SortField>("eventTime");
   const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const [view, setView] = useState<"table" | "dashboard">("table");
+  const [density, setDensity] = useState<"comfortable" | "compact">("comfortable");
   const [folderSidebarOpen, setFolderSidebarOpen] = useState(true);
   const [filterSidebarOpen, setFilterSidebarOpen] = useState(true);
 
@@ -89,6 +91,11 @@ const Explorer = () => {
     setSortField(field);
   }, [sortField]);
 
+  const handleLogout = useCallback(() => {
+    logout();
+    navigate("/login");
+  }, [navigate]);
+
   const filteredEvents = useMemo(() => {
     let result = [...events];
 
@@ -135,7 +142,12 @@ const Explorer = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full flex-col bg-background">
+      <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-fuchsia-400/25 blur-3xl" />
+          <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-violet-400/20 blur-3xl" />
+        </div>
         <TopBar
           breadcrumb={breadcrumb}
           totalCount={filteredEvents.length}
@@ -143,31 +155,36 @@ const Explorer = () => {
           onSearchChange={setSearch}
           view={view}
           onViewChange={setView}
+          density={density}
+          onDensityChange={setDensity}
           events={filteredEvents}
           onToggleFolders={() => setFolderSidebarOpen((v) => !v)}
           onToggleFilters={() => setFilterSidebarOpen((v) => !v)}
           onSettings={() => navigate("/settings")}
+          onLogout={handleLogout}
         />
-        <div className="flex flex-1 overflow-hidden">
+        <div className="relative z-10 mx-3 mb-3 flex flex-1 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 shadow-[0_24px_90px_rgba(0,0,0,0.45)] backdrop-blur">
           {folderSidebarOpen && (
-            <div className="w-64 shrink-0 overflow-y-auto border-r bg-sidebar p-3">
+            <div className="m-3 mr-0 w-64 shrink-0 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/65 p-3 shadow-inner shadow-cyan-400/5 backdrop-blur">
               <FolderTree
                 initialFolders={folders}
                 onSelectDay={handleSelectDay}
                 loadChildren={loadFolders}
+                density={density}
               />
             </div>
           )}
           {view === "table" && filterSidebarOpen && events.length > 0 && (
-            <div className="w-64 shrink-0 overflow-y-auto border-r bg-sidebar p-3">
+            <div className="m-3 ml-0 mr-0 w-64 shrink-0 overflow-y-auto rounded-xl border border-white/10 bg-slate-900/65 p-3 shadow-inner shadow-cyan-400/5 backdrop-blur">
               <FilterSidebar
                 filters={filters}
                 onFiltersChange={setFilters}
                 uniqueValues={uniqueValues}
+                density={density}
               />
             </div>
           )}
-          <main className="flex-1 overflow-y-auto p-4">
+          <main className="relative z-10 flex-1 overflow-y-auto p-3 pr-4">
             {view === "table" ? (
               <EventTable
                 events={filteredEvents}
@@ -180,6 +197,7 @@ const Explorer = () => {
                 sortDir={sortDir}
                 onSort={handleSort}
                 selectedPrefix={selectedPrefix}
+                density={density}
               />
             ) : (
               <Dashboard events={filteredEvents} />

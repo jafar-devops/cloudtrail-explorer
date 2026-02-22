@@ -17,46 +17,50 @@ interface FilterSidebarProps {
     accountIds: string[];
     regions: string[];
   };
+  density: "comfortable" | "compact";
 }
 
-export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: FilterSidebarProps) {
+export function FilterSidebar({ filters, onFiltersChange, uniqueValues, density }: FilterSidebarProps) {
   const set = (key: keyof Filters, value: any) => onFiltersChange({ ...filters, [key]: value });
+  const controlHeight = density === "compact" ? "h-7" : "h-8";
+  const controlText = density === "compact" ? "text-[11px]" : "text-xs";
+  const controlClass = `${controlHeight} ${controlText} border-white/10 bg-slate-900/70 text-slate-100`;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-lg border border-white/5 bg-slate-900/55 p-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Filters</h3>
-        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => onFiltersChange(emptyFilters)}>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">Filters</h3>
+        <Button variant="ghost" size="sm" className="h-7 text-xs text-slate-300 hover:bg-white/10 hover:text-cyan-200" onClick={() => onFiltersChange(emptyFilters)}>
           <X className="mr-1 h-3 w-3" /> Clear
         </Button>
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs">Event Name</Label>
-        <Input className="h-8 text-xs" placeholder="e.g. AssumeRole" value={filters.eventName} onChange={(e) => set("eventName", e.target.value)} />
+        <Label className="text-xs text-slate-300">Event Name</Label>
+        <Input className={controlClass} placeholder="e.g. AssumeRole" value={filters.eventName} onChange={(e) => set("eventName", e.target.value)} />
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Event Source</Label>
-        <Input className="h-8 text-xs" placeholder="e.g. s3.amazonaws.com" value={filters.eventSource} onChange={(e) => set("eventSource", e.target.value)} />
+        <Label className="text-xs text-slate-300">Event Source</Label>
+        <Input className={controlClass} placeholder="e.g. s3.amazonaws.com" value={filters.eventSource} onChange={(e) => set("eventSource", e.target.value)} />
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Username</Label>
-        <Input className="h-8 text-xs" placeholder="e.g. admin" value={filters.username} onChange={(e) => set("username", e.target.value)} />
+        <Label className="text-xs text-slate-300">Username</Label>
+        <Input className={controlClass} placeholder="e.g. admin" value={filters.username} onChange={(e) => set("username", e.target.value)} />
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Resource Name</Label>
-        <Input className="h-8 text-xs" placeholder="Filter by resource" value={filters.resourceName} onChange={(e) => set("resourceName", e.target.value)} />
+        <Label className="text-xs text-slate-300">Resource Name</Label>
+        <Input className={controlClass} placeholder="Filter by resource" value={filters.resourceName} onChange={(e) => set("resourceName", e.target.value)} />
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Source IP</Label>
-        <Input className="h-8 text-xs" placeholder="e.g. 10.0.0.1" value={filters.sourceIP} onChange={(e) => set("sourceIP", e.target.value)} />
+        <Label className="text-xs text-slate-300">Source IP</Label>
+        <Input className={controlClass} placeholder="e.g. 10.0.0.1" value={filters.sourceIP} onChange={(e) => set("sourceIP", e.target.value)} />
       </div>
 
       {/* Dropdowns */}
       <div className="space-y-1">
-        <Label className="text-xs">Resource Type</Label>
+        <Label className="text-xs text-slate-300">Resource Type</Label>
         <Select value={filters.resourceType || "all"} onValueChange={(v) => set("resourceType", v === "all" ? "" : v)}>
-          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectTrigger className={controlClass}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             {uniqueValues.resourceTypes.map((t) => <SelectItem key={t} value={t}>{t.split("::").pop()}</SelectItem>)}
@@ -64,9 +68,9 @@ export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: Filter
         </Select>
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Region</Label>
+        <Label className="text-xs text-slate-300">Region</Label>
         <Select value={filters.region || "all"} onValueChange={(v) => set("region", v === "all" ? "" : v)}>
-          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectTrigger className={controlClass}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             {uniqueValues.regions.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
@@ -76,9 +80,9 @@ export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: Filter
 
       {/* Boolean filters */}
       <div className="space-y-1">
-        <Label className="text-xs">Read Only</Label>
+        <Label className="text-xs text-slate-300">Read Only</Label>
         <Select value={filters.readOnly} onValueChange={(v: any) => set("readOnly", v)}>
-          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectTrigger className={controlClass}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="yes">Yes</SelectItem>
@@ -87,9 +91,9 @@ export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: Filter
         </Select>
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Error Code Exists</Label>
+        <Label className="text-xs text-slate-300">Error Code Exists</Label>
         <Select value={filters.errorExists} onValueChange={(v: any) => set("errorExists", v)}>
-          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+          <SelectTrigger className={controlClass}><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="yes">Yes</SelectItem>
@@ -100,10 +104,10 @@ export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: Filter
 
       {/* Date filters */}
       <div className="space-y-1">
-        <Label className="text-xs">Date From</Label>
+        <Label className="text-xs text-slate-300">Date From</Label>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className={cn("w-full justify-start text-xs h-8", !filters.dateFrom && "text-muted-foreground")}>
+            <Button variant="outline" size="sm" className={cn(`w-full justify-start border-white/10 bg-slate-900/70 ${controlText} ${controlHeight}`, !filters.dateFrom && "text-slate-500")}>
               <CalendarIcon className="mr-2 h-3.5 w-3.5" />
               {filters.dateFrom ? format(filters.dateFrom, "PPP") : "Pick a date"}
             </Button>
@@ -114,10 +118,10 @@ export function FilterSidebar({ filters, onFiltersChange, uniqueValues }: Filter
         </Popover>
       </div>
       <div className="space-y-1">
-        <Label className="text-xs">Date To</Label>
+        <Label className="text-xs text-slate-300">Date To</Label>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className={cn("w-full justify-start text-xs h-8", !filters.dateTo && "text-muted-foreground")}>
+            <Button variant="outline" size="sm" className={cn(`w-full justify-start border-white/10 bg-slate-900/70 ${controlText} ${controlHeight}`, !filters.dateTo && "text-slate-500")}>
               <CalendarIcon className="mr-2 h-3.5 w-3.5" />
               {filters.dateTo ? format(filters.dateTo, "PPP") : "Pick a date"}
             </Button>

@@ -52,49 +52,47 @@ export function Dashboard({ events }: DashboardProps) {
   }, [events]);
 
   if (events.length === 0) {
-    return <p className="py-24 text-center text-muted-foreground">Load events to see the dashboard</p>;
+    return <p className="py-24 text-center text-slate-400">Load events to see the dashboard</p>;
   }
 
   return (
     <div className="space-y-6">
-      {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Events</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent><p className="text-2xl font-bold">{stats.total}</p></CardContent>
         </Card>
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Failed Events</CardTitle>
             <AlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent><p className="text-2xl font-bold text-destructive">{stats.errorCount}</p></CardContent>
         </Card>
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Unique Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent><p className="text-2xl font-bold">{stats.userData.length}</p></CardContent>
         </Card>
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Top API Call</CardTitle>
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-bold">{stats.topApis[0]?.[0] ?? "—"}</p>
+            <p className="text-lg font-bold">{stats.topApis[0]?.[0] ?? "-"}</p>
             <p className="text-xs text-muted-foreground">{stats.topApis[0]?.[1] ?? 0} calls</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader><CardTitle className="text-base">Events by Service</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -108,7 +106,7 @@ export function Dashboard({ events }: DashboardProps) {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
           <CardHeader><CardTitle className="text-base">Events by User</CardTitle></CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -124,8 +122,7 @@ export function Dashboard({ events }: DashboardProps) {
         </Card>
       </div>
 
-      {/* Top API calls */}
-      <Card>
+      <Card className="border-white/10 bg-slate-950/55 shadow-[0_12px_35px_rgba(0,0,0,0.35)]">
         <CardHeader><CardTitle className="text-base">Most Used API Calls</CardTitle></CardHeader>
         <CardContent>
           <div className="space-y-3">

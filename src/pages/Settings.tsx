@@ -7,12 +7,18 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { loadSettings, saveSettings, connectToBucket } from "@/services/api";
-import { Shield, Server, Loader2 } from "lucide-react";
+import { Shield, Server, Loader2, LogOut } from "lucide-react";
+import { logout } from "@/services/auth";
 
 const Settings = () => {
   const navigate = useNavigate();
   const [settings, setSettings] = useState(loadSettings);
   const [connecting, setConnecting] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const handleConnect = async () => {
     if (!settings.useMockData && !settings.apiUrl) {
@@ -40,6 +46,11 @@ const Settings = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-lg shadow-lg">
         <CardHeader className="text-center space-y-2">
+          <div className="flex justify-end">
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <LogOut className="mr-1 h-4 w-4" /> Sign Out
+            </Button>
+          </div>
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
             <Shield className="h-7 w-7 text-primary" />
           </div>

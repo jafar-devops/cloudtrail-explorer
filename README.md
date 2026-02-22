@@ -71,3 +71,15 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Authentication credential update
+
+The login page reads encrypted credentials from `public/auth-credentials.json`.
+
+To rotate credentials:
+
+```sh
+npm run auth:update -- --username <new-username> --password <new-password>
+```
+
+This command rewrites `public/auth-credentials.json` in encrypted format expected by `src/services/auth.ts`.
