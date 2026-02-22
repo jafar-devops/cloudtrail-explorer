@@ -146,7 +146,7 @@ const Explorer = () => {
           events={filteredEvents}
           onToggleFolders={() => setFolderSidebarOpen((v) => !v)}
           onToggleFilters={() => setFilterSidebarOpen((v) => !v)}
-          onSettings={() => navigate("/")}
+          onSettings={() => navigate("/settings")}
         />
         <div className="flex flex-1 overflow-hidden">
           {folderSidebarOpen && (
